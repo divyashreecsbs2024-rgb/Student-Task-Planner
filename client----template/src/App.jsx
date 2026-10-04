@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [task, setTask] = useState("");
   const [priority, setPriority] = useState("Medium");
-const API = "http://localhost:5000/tasks";
+const API = "https://student-task-planner-ow7c.onrender.com/tasks";
 const [tasks, setTasks] = useState([]);
 
 useEffect(() => {
