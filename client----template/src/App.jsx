@@ -4,40 +4,47 @@ import "./App.css";
 function App() {
   const [task, setTask] = useState("");
   const [priority, setPriority] = useState("Medium");
-  const [tasks, setTasks] = useState(() => {
-  const savedTasks = localStorage.getItem("tasks");
-  return savedTasks ? JSON.parse(savedTasks) : [];
-});
+const API = "http://localhost:5000/tasks";
+const [tasks, setTasks] = useState([]);
+
 useEffect(() => {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}, [tasks]);
+  fetch(API)
+    .then((res) => res.json())
+    .then((data) => setTasks(data))
+    .catch((err) => console.log(err));
+}, []);
 
-  const addTask = () => {
-    if (task.trim() === "") return;
-
-    const newTask = {
+const addTask = async () => {
+  if (task.trim() === "") return;
+  const res = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       text: task,
-      completed: false,
       priority: priority,
       date: new Date().toLocaleDateString(),
-    };
+    }),
+  });
+  const saved = await res.json();
+  setTasks([...tasks, saved]);
+  setTask("");
+};
 
-    setTasks([...tasks, newTask]);
-    setTask("");
-  };
+const deleteTask = async (id) => {
+  await fetch(`${API}/${id}`, { method: "DELETE" });
+  setTasks(tasks.filter((t) => t._id !== id));
+};
 
-  const deleteTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
-
-  const completeTask = (index) => {
-    const updatedTasks = [...tasks];
-
-    updatedTasks[index].completed =
-      !updatedTasks[index].completed;
-
-    setTasks(updatedTasks);
-  };
+const completeTask = async (id) => {
+  const current = tasks.find((t) => t._id === id);
+  const res = await fetch(`${API}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ completed: !current.completed }),
+  });
+  const updated = await res.json();
+  setTasks(tasks.map((t) => (t._id === id ? updated : t)));
+};
 
   return (
     <div className="app">
@@ -61,8 +68,8 @@ useEffect(() => {
           <p>No tasks added yet.</p>
         ) : (
           <ul>
-            {tasks.map((item, index) => (
-              <li key={index}>
+            {tasks.map((item) => (
+              <li key={item._id}>
                 <span
                   className={item.completed ? "completed-task" : ""}
                 >
@@ -74,11 +81,11 @@ useEffect(() => {
   {item.date} | Priority: {item.priority}
 </small>
 
-                <button onClick={() => completeTask(index)}>
+                <button onClick={() => completeTask(item._id)}>
                   {item.completed ? "Undo" : "Complete"}
                 </button>
 
-                <button onClick={() => deleteTask(index)}>
+                <button onClick={() => deleteTask(item._id)}>
                   Delete
                 </button>
               </li>
