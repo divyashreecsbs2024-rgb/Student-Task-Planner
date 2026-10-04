@@ -1,0 +1,92 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.planner {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.input-section {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input-section input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.input-section select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #4f46e5;
+  color: white;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  padding: 15px;
+  margin: 10px 0;
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.completed-task {
+  text-decoration: line-through;
+  color: gray;
+}
+
+small {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+}
+
+.priority-high {
+  color: red;
+}
+
+.priority-medium {
+  color: orange;
+}
+
+.priority-low {
+  color: green;
+}
+
+li button {
+  margin-right: 8px;
+  margin-top: 10px;
+}
